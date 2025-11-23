@@ -1,9 +1,19 @@
 import React from 'react';
-import { X, Check, Hash, Bell, MessageSquare } from 'lucide-react';
+import { X, Check, Hash, AlertCircle, MessageSquare, ArrowDown, BellOff } from 'lucide-react';
 
 const ProblemSection: React.FC = () => {
+  // Generate a long list of dummy channels for the "Chaos" visual
+  const chaoticChannels = Array(20).fill(null).map((_, i) => ({
+    name: `visitor-${3800 + i}-${['pricing', 'help', 'sales', 'bug', 'demo'][i % 5]}`,
+    unread: i % 2 === 0,
+    mentions: i % 3 === 0 ? Math.floor(Math.random() * 5) + 1 : 0
+  }));
+
   return (
-    <section className="py-24 bg-white overflow-hidden">
+    <section className="py-24 bg-white overflow-hidden relative">
+      {/* Background Decor */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-96 bg-gray-50 skew-y-3 -z-10"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
@@ -17,155 +27,175 @@ const ProblemSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           
-          {/* Problem: The Channel Explosion */}
-          <div className="group relative bg-white rounded-2xl border border-gray-200 p-8 lg:p-10 shadow-sm hover:shadow-md transition-shadow">
-            <div className="absolute top-0 left-0 w-full h-1 bg-red-400 opacity-80 rounded-t-2xl"></div>
-            
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <X className="w-5 h-5 text-red-600" strokeWidth={3} />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900">The "Channel Explosion"</h3>
+          {/* LEFT: The Chaos (Visual Hook) */}
+          <div className="relative group perspective-1000">
+             {/* The Card */}
+            <div className="relative bg-[#1a1d21] rounded-2xl border border-gray-800 shadow-2xl overflow-hidden h-[500px] flex flex-col transform transition-transform duration-500 group-hover:scale-[1.02]">
+              
+              {/* Header */}
+              <div className="h-12 border-b border-gray-800 flex items-center px-4 bg-[#1a1d21] shrink-0 z-20">
+                 <div className="w-3 h-3 rounded-full bg-red-500 mr-2 opacity-50"></div>
+                 <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2 opacity-50"></div>
+                 <div className="w-3 h-3 rounded-full bg-green-500 opacity-50"></div>
+                 <div className="ml-auto text-gray-500 text-xs font-mono">Workspace: Chaos</div>
               </div>
-              <p className="text-gray-600">
-                Most tools create a new channel for every single visitor. Your sidebar becomes a graveyard of dead chats, and your team gets notification fatigue.
-              </p>
-            </div>
 
-            {/* Visual: Cluttered Sidebar */}
-            <div className="relative bg-slate-800 rounded-lg shadow-inner overflow-hidden h-64 border border-slate-700 select-none">
-              {/* Fake Sidebar Header */}
-              <div className="h-10 border-b border-slate-700 flex items-center px-4 bg-slate-900/50">
-                 <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                 <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              {/* Sidebar Title */}
+              <div className="px-4 py-3 border-b border-gray-800/50 bg-[#1a1d21] z-20 flex justify-between items-center">
+                 <span className="text-gray-400 text-xs font-bold uppercase tracking-wider">Channels</span>
+                 <span className="text-red-500 text-xs font-bold animate-pulse">99+ Unread</span>
               </div>
-              
-              {/* Channel List */}
-              <div className="p-3 space-y-1 opacity-90">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">Channels</div>
-                
-                {/* The Mess */}
-                {[
-                  { name: 'general', active: false },
-                  { name: 'visitor-3829-nyc', active: true, count: 2 },
-                  { name: 'visitor-3830-pricing', active: true, count: 1 },
-                  { name: 'visitor-3831-help', active: false },
-                  { name: 'visitor-3832-eu', active: true, count: 5 },
-                  { name: 'visitor-3833-sales', active: false },
-                  { name: 'visitor-3834-login', active: true, count: 1 },
-                  { name: 'visitor-3835', active: false },
-                ].map((channel, i) => (
-                  <div key={i} className={`flex items-center justify-between px-2 py-1.5 rounded text-sm ${channel.active ? 'bg-slate-700 text-white font-medium' : 'text-slate-400'}`}>
-                    <div className="flex items-center gap-2 truncate">
-                      <Hash className="w-3 h-3 opacity-50" />
-                      <span className="truncate max-w-[140px]">{channel.name}</span>
-                    </div>
-                    {channel.count && (
-                      <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 rounded-full min-w-[18px] text-center">
-                        {channel.count}
-                      </span>
-                    )}
-                  </div>
-                ))}
-                
-                {/* Fade out effect */}
-                <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-slate-800 to-transparent pointer-events-none"></div>
+
+              {/* Infinite Scroll Container */}
+              <div className="relative flex-1 overflow-hidden bg-[#1a1d21]">
+                 {/* Gradient Overlay Top/Bottom to fade edges */}
+                 <div className="absolute top-0 left-0 w-full h-12 bg-gradient-to-b from-[#1a1d21] to-transparent z-10 pointer-events-none"></div>
+                 <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-[#1a1d21] to-transparent z-10 pointer-events-none"></div>
+
+                 {/* The Moving List */}
+                 <div className="animate-scroll-y">
+                    {[...chaoticChannels, ...chaoticChannels, ...chaoticChannels].map((channel, i) => (
+                      <div key={i} className="px-4 py-2 flex items-center justify-between hover:bg-white/5 transition-colors group/item cursor-not-allowed opacity-80">
+                         <div className={`flex items-center gap-3 truncate ${channel.unread ? 'text-white font-medium' : 'text-gray-500'}`}>
+                            <Hash className="w-4 h-4 opacity-40" />
+                            <span className="truncate max-w-[200px] text-sm">{channel.name}</span>
+                         </div>
+                         {channel.unread && (
+                           <div className={`text-[10px] font-bold px-1.5 rounded-full min-w-[18px] text-center shadow-sm ${channel.mentions > 0 ? 'bg-red-600 text-white' : 'bg-white/10 text-white border border-white/20'}`}>
+                             {channel.mentions > 0 ? channel.mentions : ''}
+                           </div>
+                         )}
+                      </div>
+                    ))}
+                 </div>
               </div>
-              
-              {/* Floating Alert */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-red-50 text-red-600 px-4 py-2 rounded-full shadow-lg border border-red-100 text-xs font-bold flex items-center gap-2 animate-bounce">
-                <Bell className="w-3 h-3" />
-                <span>50+ unread channels</span>
+
+              {/* Overlay Alert */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 bg-red-600/90 backdrop-blur-sm text-white p-4 rounded-xl shadow-2xl border border-red-500 text-center transform scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 z-30">
+                 <AlertCircle className="w-8 h-8 mx-auto mb-2 text-white" />
+                 <div className="font-bold text-lg">Sidebar Overload</div>
+                 <div className="text-sm text-red-100">Stop creating a new channel for every visitor.</div>
               </div>
+
+            </div>
+            
+            {/* Context Text */}
+            <div className="text-center mt-6">
+               <h3 className="text-xl font-bold text-gray-900 flex items-center justify-center gap-2">
+                 <X className="text-red-600" strokeWidth={3} /> 
+                 The "Channel Explosion"
+               </h3>
+               <p className="text-gray-500 mt-2 text-sm max-w-sm mx-auto">
+                 Dozens of dead channels clutter your workspace, making it impossible to see what actually matters.
+               </p>
             </div>
           </div>
 
-          {/* Solution: ThreadChat Way */}
-          <div className="group relative bg-white rounded-2xl border border-brand/20 p-8 lg:p-10 shadow-xl shadow-brand/5 ring-1 ring-brand/5">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand to-pink-600 rounded-t-2xl"></div>
 
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-brand/10 rounded-lg">
-                  <Check className="w-5 h-5 text-brand" strokeWidth={3} />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900">One Channel. Organized Threads.</h3>
-              </div>
-              <p className="text-gray-600">
-                Route all chats to a single <strong>#website-support</strong> channel. Each visitor gets one clean thread. Your sidebar stays tidy, and nothing slips through the cracks.
-              </p>
+          {/* RIGHT: The Solution (Visual Relief) */}
+          <div className="relative group perspective-1000 mt-12 lg:mt-0">
+             
+             {/* The Card */}
+            <div className="relative bg-white rounded-2xl border border-gray-200 shadow-2xl shadow-brand/10 overflow-hidden h-[500px] flex flex-col transform transition-transform duration-500 group-hover:scale-[1.02]">
+               
+               {/* Green Status Bar Top */}
+               <div className="h-1.5 w-full bg-gradient-to-r from-brand to-slack-green"></div>
+
+               {/* Header */}
+               <div className="h-14 border-b border-gray-100 flex items-center justify-between px-6 bg-white shrink-0 z-20">
+                 <div className="flex items-center gap-3">
+                    <Hash className="w-5 h-5 text-gray-400" />
+                    <span className="font-bold text-gray-900 text-lg">website-support</span>
+                 </div>
+                 <div className="flex items-center gap-2 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full font-medium border border-green-100">
+                    <Check className="w-4 h-4" />
+                    <span>All Systems Operational</span>
+                 </div>
+               </div>
+
+               {/* Threaded Content */}
+               <div className="p-6 bg-[#F8F8F8] flex-1 relative">
+                  
+                  {/* The "One" Thread */}
+                  <div className="relative pl-4">
+                     {/* The Thread Spine Line - Crucial visual for "Threaded" */}
+                     <div className="absolute left-0 top-4 bottom-0 w-0.5 bg-gray-200 group-hover:bg-brand/30 transition-colors duration-500"></div>
+
+                     {/* Main Parent Message */}
+                     <div className="relative mb-6">
+                        <div className="absolute -left-[21px] top-3 w-3 h-3 rounded-full border-2 border-white bg-gray-300 z-10"></div>
+                        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex gap-4 items-start hover:shadow-md transition-shadow">
+                           <div className="w-10 h-10 rounded bg-brand flex items-center justify-center text-white font-bold shrink-0">TC</div>
+                           <div className="flex-1">
+                              <div className="flex justify-between items-start">
+                                 <div>
+                                    <span className="font-bold text-gray-900 mr-2">ThreadChat Bot</span>
+                                    <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded font-medium">APP</span>
+                                 </div>
+                                 <span className="text-xs text-gray-400">10:42 AM</span>
+                              </div>
+                              <p className="text-gray-800 mt-1">
+                                 New conversation started on <span className="text-brand font-medium">/pricing</span>
+                              </p>
+                              <div className="mt-3 p-3 bg-gray-50 rounded text-gray-600 italic text-sm border-l-2 border-brand/20">
+                                 "Hi there! Is the Enterprise plan billed annually?"
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* Reply 1 */}
+                     <div className="relative mb-4 ml-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
+                        {/* Curve Connector */}
+                        <div className="absolute -left-6 top-5 w-4 h-6 border-b-2 border-l-2 border-gray-200 rounded-bl-xl"></div>
+                        
+                        <div className="flex gap-3">
+                           <img src="https://randomuser.me/api/portraits/women/44.jpg" className="w-8 h-8 rounded bg-gray-200" alt="Sarah" />
+                           <div className="bg-white p-3 rounded-tr-xl rounded-b-xl shadow-sm border border-gray-100 text-sm text-gray-800">
+                              <span className="font-bold block text-gray-900 mb-1">Sarah (Support)</span>
+                              Checking this for you now! One moment.
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* Reply 2 */}
+                     <div className="relative mb-4 ml-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards">
+                        <div className="absolute -left-6 top-5 w-4 h-6 border-b-2 border-l-2 border-gray-200 rounded-bl-xl"></div>
+                        <div className="flex gap-3">
+                           <img src="https://randomuser.me/api/portraits/women/44.jpg" className="w-8 h-8 rounded bg-gray-200" alt="Sarah" />
+                           <div className="bg-white p-3 rounded-tr-xl rounded-b-xl shadow-sm border border-gray-100 text-sm text-gray-800">
+                              Yes, it is billed annually, but we offer a 20% discount for early startups. Sending you a link!
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* "Reply" Input Area */}
+                     <div className="relative ml-8 mt-6 opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                        <div className="absolute -left-6 top-5 w-4 h-6 border-b-2 border-l-2 border-gray-200 rounded-bl-xl"></div>
+                        <div className="border border-gray-300 bg-white rounded-lg p-3 flex justify-between items-center shadow-sm">
+                           <span className="text-gray-400 text-sm">Reply in thread...</span>
+                           <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                              <ArrowDown className="w-3 h-3" />
+                           </div>
+                        </div>
+                     </div>
+
+                  </div>
+               </div>
             </div>
 
-            {/* Visual: Clean Slack Thread */}
-            <div className="relative bg-white rounded-lg shadow-slack border border-gray-200 overflow-hidden h-64 flex flex-col">
-              {/* Channel Header */}
-              <div className="h-12 border-b border-gray-100 flex items-center px-4 bg-white shrink-0">
-                <Hash className="w-4 h-4 text-gray-400 mr-2" />
-                <span className="font-bold text-gray-900">website-support</span>
-                <span className="mx-2 text-gray-300">|</span>
-                <span className="text-xs text-gray-500 truncate">All visitor conversations live here</span>
-              </div>
-
-              {/* Messages Area */}
-              <div className="flex-1 p-4 bg-gray-50 relative overflow-hidden">
-                
-                {/* Parent Message */}
-                <div className="flex gap-3 mb-4 group/msg">
-                  <div className="w-9 h-9 rounded bg-brand flex items-center justify-center shrink-0 text-white font-bold text-xs shadow-sm">
-                    TC
-                  </div>
-                  <div className="flex-1 bg-white p-3 rounded-tr-xl rounded-b-xl shadow-sm border border-gray-100">
-                    <div className="flex items-baseline gap-2 mb-1">
-                      <span className="font-bold text-gray-900 text-sm">ThreadChat Bot</span>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-1 rounded">APP</span>
-                      <span className="text-xs text-gray-400">10:42 AM</span>
-                    </div>
-                    <div className="text-sm text-gray-800">
-                      New visitor starting a chat on <span className="font-mono text-xs bg-gray-100 px-1 py-0.5 rounded text-pink-600">/pricing</span>
-                      <br/>
-                      <span className="text-gray-500 italic mt-1 block">"Hi, do you offer startup discounts?"</span>
-                    </div>
-                    
-                    {/* Thread Bar */}
-                    <div className="mt-3 flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 -ml-1 rounded transition-colors">
-                      <div className="flex -space-x-1 pl-1">
-                         <div className="w-5 h-5 rounded bg-blue-500 border-2 border-white"></div>
-                         <div className="w-5 h-5 rounded bg-green-500 border-2 border-white"></div>
-                      </div>
-                      <span className="text-xs font-bold text-blue-600">2 replies</span>
-                      <span className="text-xs text-gray-400">Last reply today at 10:45 AM</span>
-                      <span className="text-xs text-gray-400 opacity-0 group-hover/msg:opacity-100 transition-opacity ml-auto">View thread</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Second Message (Snippet) */}
-                <div className="flex gap-3 opacity-60">
-                  <div className="w-9 h-9 rounded bg-brand flex items-center justify-center shrink-0 text-white font-bold text-xs shadow-sm">
-                    TC
-                  </div>
-                  <div className="flex-1 bg-white p-3 rounded-tr-xl rounded-b-xl shadow-sm border border-gray-100">
-                    <div className="flex items-baseline gap-2 mb-1">
-                      <span className="font-bold text-gray-900 text-sm">ThreadChat Bot</span>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-1 rounded">APP</span>
-                    </div>
-                    <div className="text-sm text-gray-800 h-2 w-3/4 bg-gray-100 rounded animate-pulse"></div>
-                  </div>
-                </div>
-
-                {/* Hand cursor overlay to imply ease */}
-                <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-gray-200 shadow-lg px-3 py-1.5 rounded-full flex items-center gap-2 text-xs font-bold text-brand animate-pulse">
-                   <MessageSquare className="w-3 h-3" />
-                   Reply in thread
-                </div>
-
-              </div>
+            {/* Context Text */}
+            <div className="text-center mt-6">
+               <h3 className="text-xl font-bold text-gray-900 flex items-center justify-center gap-2">
+                 <Check className="text-brand" strokeWidth={3} /> 
+                 The "ThreadChat Way"
+               </h3>
+               <p className="text-gray-500 mt-2 text-sm max-w-sm mx-auto">
+                 One single channel. Every visitor gets their own neat thread. Your sidebar stays clean, and you stay sane.
+               </p>
             </div>
-
           </div>
 
         </div>

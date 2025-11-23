@@ -96,7 +96,7 @@ const Features: React.FC = () => {
               </p>
             </div>
             {/* Color Circles Visual */}
-            <div className="flex -space-x-4 mt-8 sm:mt-0 sm:mr-8 opacity-80 group-hover:space-x-1 transition-all duration-500">
+            <div className="flex -space-x-4 mt-8 sm:mt-0 sm:mr-8 opacity-80 transition-all duration-500">
                 <div className="w-14 h-14 rounded-full border-4 border-[#4A154B] bg-[#36C5F0] shadow-lg"></div>
                 <div className="w-14 h-14 rounded-full border-4 border-[#4A154B] bg-[#E01E5A] shadow-lg"></div>
                 <div className="w-14 h-14 rounded-full border-4 border-[#4A154B] bg-[#2EB67D] shadow-lg"></div>
