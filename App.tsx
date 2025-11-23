@@ -8,7 +8,7 @@ import Waitlist from './components/Waitlist';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
+    <div className="min-h-screen flex flex-col overflow-x-hidden font-sans">
       <Header />
       <main className="flex-grow">
         <Hero />
